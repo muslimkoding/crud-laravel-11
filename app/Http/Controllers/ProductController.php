@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -11,7 +12,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        // get all products with paginate 10
+        $products = Product::latest()->paginate(10);
+
+        return view('products.index', compact('products'));
     }
 
     /**
