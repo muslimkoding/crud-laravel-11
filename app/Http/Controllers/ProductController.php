@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -23,7 +24,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('products.create');
     }
 
     /**
@@ -31,7 +32,30 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // validate form
+        $request->validate([
+            'image' => 'required|image|mimes:png,jpg,jpeg|max:2048',
+            'title' => 'required|min:5',
+            'desctiption' => 'required|min:10',
+            'price' => 'required|numeric',
+            'stock' => 'required|numeric',
+        ]);
+
+        // upload image
+        $image = $request->file('image');
+        $image->storeAs('public/products', $image->hashName());
+
+        // create product 
+        Product::create([
+            'image' => $image->hashName(),
+            'title' => $request->title,
+            'desctiption' => $request->description,
+            'price' => $request->price,
+            'stock' => $request->stock,
+        ]);
+
+        // redirect to indix
+        return redirect()->route('products.index')->with(['success' => 'Data berhasil disimpan!']);
     }
 
     /**
