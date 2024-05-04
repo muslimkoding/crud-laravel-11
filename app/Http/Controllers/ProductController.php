@@ -111,7 +111,7 @@ class ProductController extends Controller
             Storage::delete('public/products/'. $product->image);
 
             // update product with new image
-            $product::update([
+            $product->update([
                 'image' => $image->hashName(),
                 'title' => $request->title,
                 'description' => $request->description,
@@ -121,7 +121,7 @@ class ProductController extends Controller
 
         } else {
              // update product without image
-            $product::update([
+            $product->update([
                 'title' => $request->title,
                 'description' => $request->description,
                 'price' => $request->price,
